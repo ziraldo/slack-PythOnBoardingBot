@@ -144,11 +144,17 @@ def message(**payload):
     user_id = data.get("user")
     text = data.get("text")
 
-    if text and text.lower() == "start":
-        return start_onboarding(web_client, user_id, channel_id)
-    elif text and re.search("what.*lunch\?$", text, re.IGNORECASE):
-        return send_restaurant_suggestion(web_client, user_id, channel_id)
-        
+    # if text and text.lower() == "start":
+    #     return start_onboarding(web_client, user_id, channel_id)
+    # elif text and re.search("what.*lunch\?$", text, re.IGNORECASE):
+    #     return send_restaurant_suggestion(web_client, user_id, channel_id)
+    if text and re.search("what.*lunch\?$", text, re.IGNORECASE):
+        return {
+            "type": "message",
+            "channel": channel_id,
+            "username": "foodoracle",
+            "text": restaurants[random.randint(0, len(restaurants))]
+        }
 
 if __name__ == "__main__":
     ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
