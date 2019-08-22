@@ -3,6 +3,7 @@ import logging
 import slack
 import ssl as ssl_lib
 import certifi
+import re
 from onboarding_tutorial import OnboardingTutorial
 
 onboarding_tutorials_sent = {}
