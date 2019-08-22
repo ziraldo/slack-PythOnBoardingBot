@@ -147,7 +147,7 @@ def message(**payload):
     if text and text.lower() == "start":
         return start_onboarding(web_client, user_id, channel_id)
     elif text and re.search("what.*lunch\?$", text, re.IGNORECASE):
-        return Restaurant(web_client, user_id, channel_id)
+        return send_restaurant_suggestion(web_client, user_id, channel_id)
         
 
 if __name__ == "__main__":
