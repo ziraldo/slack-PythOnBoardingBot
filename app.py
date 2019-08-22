@@ -7,6 +7,13 @@ from onboarding_tutorial import OnboardingTutorial
 
 onboarding_tutorials_sent = {}
 
+restaurants = [
+    "Khao San Road",
+    "Popeyes",
+    "McDonald's",
+    "Rol San"
+]
+
 def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
     # Create a new onboarding tutorial.
     onboarding_tutorial = OnboardingTutorial(channel)
@@ -123,6 +130,8 @@ def message(**payload):
 
     if text and text.lower() == "start":
         return start_onboarding(web_client, user_id, channel_id)
+    else if text and re.search("what.*lunch\?$", text, re.IGNORECASE):
+        return restaurants[random.randint(0, len(restaurants))]
 
 if __name__ == "__main__":
     ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
