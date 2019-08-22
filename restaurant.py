@@ -40,7 +40,7 @@ class Restaurant:
         }
 
     def _get_restaurant_block(self):
-        restaurant = restaurants[random.randint(0, len(restaurants))]
+        restaurant = self.restaurants[random.randint(0, len(restaurants))]
         return [
             {"type": "section", "text": {"type": "mrkdwn", "text": restaurant}}
         ]
