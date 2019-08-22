@@ -5,15 +5,9 @@ import ssl as ssl_lib
 import certifi
 import re
 from onboarding_tutorial import OnboardingTutorial
+from restaurant import Restaurant
 
 onboarding_tutorials_sent = {}
-
-restaurants = [
-    "Khao San Road",
-    "Popeyes",
-    "McDonald's",
-    "Rol San"
-]
 
 def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
     # Create a new onboarding tutorial.
@@ -34,6 +28,27 @@ def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
     if channel not in onboarding_tutorials_sent:
         onboarding_tutorials_sent[channel] = {}
     onboarding_tutorials_sent[channel][user_id] = onboarding_tutorial
+
+
+def send_restaurant_suggestion(web_client: slack.WebClient, user_id: str, channel: str):
+    # Create a new onboarding tutorial.
+    restaurant = Restaurant(channel)
+
+    # Get the onboarding message payload
+    message = restaurant.get_message_payload()
+
+    # Post the onboarding message in Slack
+    response = web_client.chat_postMessage(**message)
+
+    # Capture the timestamp of the message we've just posted so
+    # we can use it to update the message after a user
+    # has completed an onboarding task.
+    restaurant.timestamp = response["ts"]
+
+    # # Store the message sent in onboarding_tutorials_sent
+    # if channel not in onboarding_tutorials_sent:
+    #     onboarding_tutorials_sent[channel] = {}
+    # onboarding_tutorials_sent[channel][user_id] = onboarding_tutorial
 
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
@@ -132,7 +147,8 @@ def message(**payload):
     if text and text.lower() == "start":
         return start_onboarding(web_client, user_id, channel_id)
     else if text and re.search("what.*lunch\?$", text, re.IGNORECASE):
-        return restaurants[random.randint(0, len(restaurants))]
+        restaurant = Restaurant(channel)
+        return 
 
 if __name__ == "__main__":
     ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
